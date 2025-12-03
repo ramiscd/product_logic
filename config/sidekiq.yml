@@ -7,3 +7,8 @@
   - mailers
   - active_storage_analysis
   - active_storage_purge
+
+:cron:
+  mark_cart_as_abandoned:
+    cron: "*/10 * * * *"
+    class: "MarkCartAsAbandonedJob"
