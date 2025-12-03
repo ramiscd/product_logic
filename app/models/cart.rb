@@ -13,7 +13,6 @@ class Cart < ApplicationRecord
     self.last_interaction_at ||= Time.current
   end
 
-  # marca o carrinho como abandonado se não houver interação nas últimas 3 horas
   def mark_as_abandoned
     threshold = 3.hours.ago
     if abandoned_at.nil? && last_interaction_at.present? && last_interaction_at < threshold
@@ -21,8 +20,6 @@ class Cart < ApplicationRecord
     end
   end
 
-  # remove o carrinho se não houver interação há 7 dias ou mais
-  # importante: usa last_interaction_at para decidir a remoção (comportamento exigido pelos testes)
   def remove_if_abandoned
     threshold = 7.days.ago
     destroy if last_interaction_at.present? && last_interaction_at <= threshold
