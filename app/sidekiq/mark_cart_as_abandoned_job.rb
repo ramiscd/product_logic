@@ -3,7 +3,7 @@ class MarkCartAsAbandonedJob
 
   def perform
     mark_carts_as_abandoned
-    remove_old_ abandoned_carts
+    remove_old_abandoned_carts
   end
 
   private

@@ -10,8 +10,7 @@ class CartsController < ApplicationController
   end
 
   def show
-    cart = find_or_create_cart
-    render json: cart_payload(cart)
+    render json: cart_payload(@cart)
   end
 
   def remove_product
@@ -23,35 +22,36 @@ class CartsController < ApplicationController
 
     cart_item.destroy
 
+    @cart.update!(last_interaction_at: Time.current)
+
     render json: cart_payload(@cart)
   end
-
 
   private
 
   def add_item_logic
-    cart = find_or_create_cart
     product = Product.find(params[:product_id])
-
-    cart_item = cart.cart_items.find_by(product_id: product.id)
+    cart_item = @cart.cart_items.find_by(product_id: product.id)
 
     if cart_item
-      cart_item.update(quantity: cart_item.quantity + params[:quantity].to_i)
+      cart_item.update!(quantity: cart_item.quantity + params[:quantity].to_i)
     else
-      cart.cart_items.create!(
+      @cart.cart_items.create!(
         product: product,
         quantity: params[:quantity]
       )
     end
 
-    render json: cart_payload(cart)
+    @cart.update!(last_interaction_at: Time.current)
+
+    render json: cart_payload(@cart)
   end
 
   def find_or_create_cart
     if session[:cart_id]
       Cart.find(session[:cart_id])
     else
-      cart = Cart.create!
+      cart = Cart.create!(last_interaction_at: Time.current)
       session[:cart_id] = cart.id
       cart
     end
@@ -73,7 +73,6 @@ class CartsController < ApplicationController
     }
   end
 
- 
   def load_cart
     @cart = find_or_create_cart
   end
