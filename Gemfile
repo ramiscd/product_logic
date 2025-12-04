@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.2.3"
+ruby "3.3.1"
 gem "rails", "~> 7.1.3", ">= 7.1.3.2"
 gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
